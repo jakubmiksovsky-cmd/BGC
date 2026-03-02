@@ -1,0 +1,58 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: cs-CZ
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup ProAudit
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup RLS
+
+	annotation PBI_QueryGroupOrder = 3
+
+/// Manual inputs from factory managers.
+queryGroup 'Factory QM'
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup 'LaMa.car'
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation PBI_QueryOrder = ["B-Targets","Week_Title_Sort","Month_Title_Sort","Language_Selection","Measures_Table","Calendar","ProAudit_Models_dim","TRANSLATIONS_BGC","GetMaxDate","QM_Atrribute_Sort","Factory Quality Commentation","ProAudit_Results_fact","LaMa_Car_fact","BGC PowerBI User Permissions"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation __TEdtr = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Measures_Table
+ref table Calendar
+ref table ProAudit_Models_dim
+ref table Week_Title_Sort
+ref table Month_Title_Sort
+ref table TRANSLATIONS_BGC
+ref table ProAudit_Results_fact
+ref table LaMa_Car_fact
+ref table 'BGC PowerBI User Permissions'
+ref table DateTableTemplate_97022151-28f7-4c62-a89b-bc78972e1a51
+ref table LocalDateTable_6f79188e-e49b-4408-ae16-ff8c8f193170
+ref table LocalDateTable_be450cfe-91f3-4d8d-85e6-e3c5875f6977
+ref table Region/Plant
+ref table LocalDateTable_5205c048-25b9-4a43-8f84-00fb3409a2e9
+ref table LocalDateTable_ec36966e-b1b1-47a0-8403-c25e7ef690ac
+ref table 'Factory Quality Commentation'
+ref table LocalDateTable_c2b5e573-8bbf-4ae8-80be-f475e4da6697
+
+ref role 'Full Access'
+ref role 'Analyst Role'
+
+ref cultureInfo en-US
+ref cultureInfo de-DE
+

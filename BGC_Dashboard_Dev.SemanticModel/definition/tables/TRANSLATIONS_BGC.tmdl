@@ -1,0 +1,209 @@
+table TRANSLATIONS_BGC
+	lineageTag: 1e7f8884-7d55-45e6-b161-895bee6d3703
+
+	measure 'Audited Cars (Dyn_Language)' = ```
+			
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Audited Cars", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Audited Cars", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Audited Cars", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+			
+			```
+		lineageTag: 86f1d603-585b-4ae2-a56d-cb5872bcfff1
+
+	measure 'Blocked Cars (Dyn Language)' =
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Blocked Cars", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Blocked Cars", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Blocked Cars", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+		lineageTag: 0356cf09-e14d-452e-a0f6-ebe6df3f61d4
+
+	measure 'Cars without AB (Dyn Language)' =
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Cars without AB", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Cars without AB", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Cars without AB", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+		lineageTag: 26332204-b98f-476c-80ac-df543436d108
+
+	measure 'TOP 10 models QK Title (Dyn Language)' =
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Top 10 models QK", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Top 10 models QK", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Top 10 models QK", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+		lineageTag: 11da2952-ac07-4a61-98a4-7bef1cc49ffc
+
+	measure 'TOP 10 models B Title (Dyn Language)' =
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Top 10 models B,B1", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Top 10 models B,B1", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Top 10 models B,B1", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+		lineageTag: 3f8d1ca2-b410-4fd9-aedb-e9d68d290bbc
+
+	measure 'Week (Dyn_Language)' = ```
+			
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Week", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Week", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Week", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+			
+			```
+		lineageTag: 995208be-12a2-42b9-9020-b2aca7c60c34
+
+	measure 'Factory (Dyn_Language)' = ```
+			
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Factory", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Factory", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Factory", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+			
+			```
+		lineageTag: 6fecf1e7-e4f1-4506-b329-571bf2a2dbc3
+
+	measure 'Model (Dyn_Language)' = ```
+			
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Model", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Model", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Model", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+			
+			```
+		lineageTag: 1862430d-d637-4aba-bb4e-9b84509bc7e7
+
+	measure 'Brand (Dyn_Language)' = ```
+			
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Brand", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Brand", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Brand", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+			
+			```
+		lineageTag: 15d9a96c-e87b-4b83-bede-fda7b4414242
+
+	measure 'Blocked Cars by Plants (Dyn_Language)' = ```
+			
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Blocked Cars by Plants", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Blocked Cars by Plants", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Blocked Cars by Plants", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+			
+			```
+		lineageTag: 0a9e0b25-163f-4451-bcaa-587cc27b8d29
+
+	measure 'Year (Dyn_Language)' = ```
+			
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Year", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Year", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Year", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+			
+			```
+		lineageTag: 93a4cb80-8ee1-4d22-a861-3ff9850fb078
+
+	measure 'QK Trend by Models Title (Dyn Language)' =
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "QK Trend by Models", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "QK Trend by Models", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "QK Trend by Models", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+		lineageTag: 4b8d7e2c-0c27-4bfc-b35d-7b0b6093bdaf
+
+	measure 'B Trend by Models Title (Dyn Language)' =
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "B Trend by Models", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "B Trend by Models", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "B Trend by Models", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+		lineageTag: aa269924-8426-4a2b-8902-930f4dcca680
+
+	measure 'More Details (Dyn_Language)' =
+			
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", "More Details",
+			    "de-DE", "Weitere Details",
+			    "More Details")  -- Default
+		lineageTag: 1e7c8616-f12a-4010-b4f1-8c9ada2b3685
+
+	measure 'Hold Notices Title (Dyn Language)' =
+			SWITCH(
+			    USERCULTURE(),
+			    "en-US", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Hold Notices", TRANSLATIONS_BGC[Language] = "EN"),
+			    "de-DE", CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Hold Notices", TRANSLATIONS_BGC[Language] = "DE"),
+			    CALCULATE(MAX(TRANSLATIONS_BGC[Value]), TRANSLATIONS_BGC[DB_Name] = "Hold Notices", TRANSLATIONS_BGC[Language] = "EN")  -- Default
+			)
+		lineageTag: afa0c242-6b30-4827-8b26-79044624c8ce
+
+	column Type
+		dataType: string
+		lineageTag: 84757035-ff17-4714-8d7b-bb3c91e62ee3
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column DB_Name
+		dataType: string
+		lineageTag: 14ba8d1d-73b0-4900-8757-d7d842fa82ad
+		summarizeBy: none
+		sourceColumn: DB_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Language
+		dataType: string
+		lineageTag: 9034863c-e620-4665-ac69-47dc406be5b3
+		summarizeBy: none
+		sourceColumn: Language
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: string
+		lineageTag: e35e225c-0804-4abe-9b7b-4d67080989a9
+		summarizeBy: none
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TRANSLATIONS_BGC = m
+		mode: import
+		source =
+				let
+				    Source = SharePoint.Files("https://volkswagengroup.sharepoint.com/sites/BGCDashboardQA/", [ApiVersion = 15]),
+				    #"Wörterbuch-BGC xlsx_https://volkswagengroup sharepoint com/sites/BGCDashboardQA/Shared Documents/Translations/" = Source{[Name="Wörterbuch-BGC.xlsx",#"Folder Path"="https://volkswagengroup.sharepoint.com/sites/BGCDashboardQA/Shared Documents/Translations/"]}[Content],
+				    #"Imported Excel Workbook" = Excel.Workbook(#"Wörterbuch-BGC xlsx_https://volkswagengroup sharepoint com/sites/BGCDashboardQA/Shared Documents/Translations/"),
+				    List1_Sheet = #"Imported Excel Workbook"{[Item="List1",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(List1_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Type", type text}, {"DB_Name", type text}, {"EN", type text}, {"DE", type text}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type", {"Type", "DB_Name"}, "Language", "Value")
+				in
+				    #"Unpivoted Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

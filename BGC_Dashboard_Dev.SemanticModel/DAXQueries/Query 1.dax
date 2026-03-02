@@ -1,0 +1,33 @@
+// Welcome to DAX query view! Learn more about DAX queries at https://aka.ms/dax-queries.
+// Right-click on tables, columns, or measures in the data pane to access quick queries, or ask Copilot for help writing DAX.
+
+// Select "Run" to try this sample DAX query.
+EVALUATE
+SUMMARIZECOLUMNS(
+    -- List all the columns to group by
+    'Calendar'[YearWeek],
+    'DATA_AUDIT'[plant_name],
+    'DATA_AUDIT'[plant_id],
+    'DATA_AUDIT'[group_brand],
+    'DATA_AUDIT'[model_name],
+    'DATA_AUDIT'[model_code],
+
+    -- Filtering only data which needs to be included
+    FILTER(
+        'DATA_AUDIT',
+        'DATA_AUDIT'[life_cycle_phase] = "SOP/Serie" &&
+	'DATA_AUDIT'[group_brand] IN {"Volkswagen", "Volkswagen NFZ", "Skoda", "Seat / Cupra"}
+    ),
+
+    -- Defining the aggregated measures
+	"Audited Cars", [Audited Cars],
+	"Cars without AB", [Cars without Note],
+	"Cars without AB %", [% Cars without Note],
+	"A/Fzg", [Ø A,A1],
+	"B/Fzg", [Ø B,B1],
+	"C/Fzg", [Ø C1],
+	"Ø Note", [Ø Note],
+	"Target Note", [Target Note],
+	"Min Note", [Min Note], 
+	"Max Note", [Max Note]
+)

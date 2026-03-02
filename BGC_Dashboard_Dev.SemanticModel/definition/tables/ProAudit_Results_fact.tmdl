@@ -1,0 +1,180 @@
+table ProAudit_Results_fact
+	lineageTag: 3f184b24-fbfe-4bc2-a12f-6d378ce760d2
+
+	column YearWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: 09fa45df-bc45-4e55-bfdf-b207440bd2b4
+		summarizeBy: none
+		sourceColumn: YearWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column plant_name
+		dataType: string
+		lineageTag: c21812a9-344f-4e77-b0f6-de8612cc65be
+		summarizeBy: none
+		sourceColumn: plant_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column plant_id
+		dataType: string
+		lineageTag: 8ea65ee1-d5a1-4530-a346-3b4b751c2313
+		summarizeBy: none
+		sourceColumn: plant_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: ac6c5c0b-3738-46db-b7d3-0de10042fe08
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column model_name
+		dataType: string
+		lineageTag: b3829d93-32ea-4b1d-ac13-b7834990a484
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column model_code
+		dataType: string
+		lineageTag: 1f2b606b-9452-47e7-883d-0769c473062e
+		summarizeBy: none
+		sourceColumn: model_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Audited Cars'
+		dataType: int64
+		formatString: 0
+		lineageTag: 71dbb2ce-7978-45ac-8329-c06e68b6d3d0
+		summarizeBy: sum
+		sourceColumn: Audited Cars
+
+		annotation SummarizationSetBy = Automatic
+
+	column A/Fzg
+		dataType: double
+		lineageTag: 16e0c641-6148-48a6-af7f-1e10a9a7dae0
+		summarizeBy: sum
+		sourceColumn: A/Fzg
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column B/Fzg
+		dataType: double
+		lineageTag: 93f5a6ff-99c3-4766-85a0-fbe50a92112a
+		summarizeBy: sum
+		sourceColumn: B/Fzg
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column C/Fzg
+		dataType: double
+		lineageTag: 30b7ab57-1703-441f-8fa4-e5f6cfe9610a
+		summarizeBy: sum
+		sourceColumn: C/Fzg
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Ø Note'
+		dataType: double
+		lineageTag: d361a018-9b90-45e4-9055-aa6c57abe19d
+		summarizeBy: sum
+		sourceColumn: Ø Note
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Min Note'
+		dataType: double
+		lineageTag: 9dea8416-f65e-459e-abec-20550638d99a
+		summarizeBy: sum
+		sourceColumn: Min Note
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Max Note'
+		dataType: double
+		lineageTag: 6417e6aa-2dbe-4c00-9e33-e1baac9af0c4
+		summarizeBy: sum
+		sourceColumn: Max Note
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Target Note'
+		dataType: double
+		lineageTag: cf5570e3-f1e6-4cc6-af6b-a00860caacbb
+		summarizeBy: sum
+		sourceColumn: Target Note
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Cars without AB'
+		dataType: int64
+		formatString: 0
+		lineageTag: ea0786e6-bdfb-40a2-bcee-b22c9ce7c318
+		summarizeBy: sum
+		sourceColumn: Cars without AB
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cars without AB %'
+		dataType: double
+		lineageTag: 7cbe6790-b844-4e01-a491-ed60223c0dfe
+		summarizeBy: sum
+		sourceColumn: Cars without AB %
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TargetB-Complaints
+		dataType: double
+		lineageTag: a398f7be-e4aa-4726-aeb8-c791211b5d05
+		summarizeBy: sum
+		sourceColumn: TargetB-Complaints
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition ProAudit_Results_fact = m
+		mode: import
+		queryGroup: ProAudit
+		source =
+				let
+				    Source = AnalysisServices.Database("powerbi://api.powerbi.com/v1.0/myorg/WS_0103_ProAudit%20Reporting%20QA_VWCO", "VWAG_ProAudit", [Implementation="2.0", Query="EVALUATE#(lf)SUMMARIZECOLUMNS(#(lf)    -- List all the columns to group by#(lf)    'Calendar'[YearWeek],#(lf)    'DATA_AUDIT'[plant_name],#(lf)    'DATA_AUDIT'[plant_id],#(lf)    'DATA_AUDIT'[group_brand],#(lf)    'DATA_AUDIT'[model_name],#(lf)    'DATA_AUDIT'[model_code],#(lf)#(lf)    -- Filtering only data which needs to be included#(lf)    FILTER(#(lf)        'DATA_AUDIT',#(lf)        'DATA_AUDIT'[life_cycle_phase] = ""SOP/Serie"" &&#(lf)#(tab)'DATA_AUDIT'[group_brand] IN {""Volkswagen"", ""Volkswagen NFZ"", ""Skoda"", ""Seat / Cupra""}#(lf)    ),#(lf)#(lf)    -- Defining the aggregated measures#(lf)#(tab)""Audited Cars"", [Audited Cars],#(lf)#(tab)""Cars without AB"", [Cars without Note],#(lf)#(tab)""Cars without AB %"", [% Cars without Note],#(lf)#(tab)""A/Fzg"", [Ø A,A1],#(lf)#(tab)""B/Fzg"", [Ø B,B1],#(lf)#(tab)""C/Fzg"", [Ø C1],#(lf)#(tab)""Ø Note"", ROUND([Ø Note], 1),#(lf)#(tab)""Target Note"", [Target Note],#(lf)#(tab)""Min Note"", [Min Note], #(lf)#(tab)""Max Note"", [Max Note]#(lf))"]),
+				    #"Renamed Columns" = Table.RenameColumns(Source,{{"Calendar[YearWeek]", "YearWeek"}, {"DATA_AUDIT[plant_name]", "plant_name"}, {"DATA_AUDIT[plant_id]", "plant_id"}, {"DATA_AUDIT[group_brand]", "group_brand"}, {"DATA_AUDIT[model_name]", "model_name"}, {"DATA_AUDIT[model_code]", "model_code"}, {"[Audited Cars]", "Audited Cars"}, {"[A/Fzg]", "A/Fzg"}, {"[B/Fzg]", "B/Fzg"}, {"[C/Fzg]", "C/Fzg"}, {"[Ø Note]", "Ø Note"}, {"[Min Note]", "Min Note"}, {"[Max Note]", "Max Note"}, {"[Target Note]", "Target Note"}, {"[Cars without AB]", "Cars without AB"}, {"[Cars without AB %]", "Cars without AB %"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Cars without AB %", Percentage.Type}}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Changed Type",{{"group_brand", "Brand"}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Renamed Columns1", {"YearWeek", "plant_id", "model_code"}, #"B-Targets", {"Calendar.YearWeek", "plantid", "model_code"}, "B-Targets", JoinKind.LeftOuter),
+				    #"Expanded B-Targets" = Table.ExpandTableColumn(#"Merged Queries", "B-Targets", {"TargetB-Complaints"}, {"TargetB-Complaints"}),
+				    // Filter out City Van as it from Ford and its not allowed to show in the dashboard
+				    #"Filtered Rows" = Table.SelectRows(#"Expanded B-Targets", each not Text.Contains([model_name], "City Van"))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

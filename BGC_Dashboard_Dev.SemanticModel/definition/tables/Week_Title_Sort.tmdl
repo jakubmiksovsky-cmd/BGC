@@ -1,0 +1,46 @@
+table Week_Title_Sort
+	isHidden
+	lineageTag: 6956736b-2668-472e-8104-a5ac88c1618e
+
+	column Week_Title
+		dataType: string
+		isHidden
+		lineageTag: 226bd81a-b62e-4333-bb0d-d978db7b4eaf
+		summarizeBy: none
+		sourceColumn: Week_Title
+		sortByColumn: Index
+
+		changedProperty = IsHidden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index
+		dataType: double
+		isHidden
+		formatString: 0
+		lineageTag: 1c0da321-ee19-46c4-8c85-bee28b44ed4a
+		summarizeBy: none
+		sourceColumn: Index
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Week_Title_Sort = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45Wci4tKkrNK1EoT03NVorViVbySSxG4oUDGQpJqWn5RakKOUAZsGBIRlFqKlhNsUJiej5YzC2/tAhNyL8kI7UIzPJLrYCZGQsA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Week_Title = _t]),
+				    #"Added Index" = Table.AddIndexColumn(Source, "Index", 1, 1),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Index",{{"Week_Title", type text}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

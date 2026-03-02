@@ -1,0 +1,304 @@
+table Calendar
+	lineageTag: 7490d5a3-db8a-47b6-bb08-fdc84750d794
+	dataCategory: Time
+
+	measure 'Last Date' = LASTDATE('Calendar'[Date])
+		formatString: Short Date
+		lineageTag: 6ab27974-7eb4-4936-b6a6-f8b59197e1cd
+
+	measure Qualit_Start_Date = FORMAT([Last Date], "dd.mm.yyyy")
+		lineageTag: 43b93de0-3ccf-440e-ba74-2a1e74d48955
+
+	measure 'User Culture' = USERCULTURE()
+		isHidden
+		lineageTag: 7ad989f3-cbeb-4580-8ffd-d3aaf5e5517a
+
+		changedProperty = IsHidden
+
+	measure 'Selected YearWeek' = SELECTEDVALUE('Calendar'[YearWeek])
+		formatString: 0
+		lineageTag: 2e832f32-3149-4824-a4c0-2b8b5275b0c9
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd.mm.yy
+		lineageTag: b7570d7b-8810-405d-b0f3-b92d98bdfb6a
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column YearWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: d40b13a8-ae31-4b35-b564-8eec1b3b65f4
+		summarizeBy: none
+		sourceColumn: YearWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: f2c98432-fd5a-4fe4-8a04-03b18052a87d
+		summarizeBy: sum
+		sourceColumn: YearMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonthName
+		dataType: string
+		lineageTag: 602d6b95-97d7-470b-af5c-6ca832cfa5b4
+		summarizeBy: none
+		sourceColumn: YearMonthName
+		sortByColumn: YearMonth
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekYear2
+		dataType: string
+		lineageTag: fd2c4911-e707-476e-8841-d8bb205564a0
+		summarizeBy: none
+		sourceColumn: WeekYear2
+		sortByColumn: YearWeek
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_week = ```
+			
+			VAR _maxyearweek1 = MAX('Calendar'[YearWeek])
+			VAR _maxyearweek2 = _maxyearweek1 - 1
+			VAR _maxyearweek3 = _maxyearweek1 - 2
+			VAR _maxyearweek4 = _maxyearweek1 - 3
+			VAR _maxyearweek5 = _maxyearweek1 - 4
+			VAR _maxyearweek6 = _maxyearweek1 - 5
+			RETURN 
+			    IF('Calendar'[YearWeek] = _maxyearweek1, "Current week",
+			            IF('Calendar'[YearWeek] = _maxyearweek2, "Last week",
+			                IF('Calendar'[YearWeek] = _maxyearweek3, "Week before last",
+			                    IF('Calendar'[YearWeek] = _maxyearweek4, "Three weeks ago",
+			                        IF('Calendar'[YearWeek] = _maxyearweek5, "Four weeks ago", "Other")
+			                    )
+			                )
+			            )
+			        )
+			```
+		lineageTag: 09efbc66-a5f7-403b-ac07-0d33762067b9
+		summarizeBy: none
+		sortByColumn: current_week_id
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_month = ```
+			
+			    IF('Calendar'[Date] > TODAY(), "Future Days",
+			        IF(EOMONTH(TODAY(), 0) = EOMONTH('Calendar'[Date],0), "Current Month",
+			            IF(EOMONTH(TODAY(), -1) = ENDOFMONTH('Calendar'[Date]), "Last Month",
+			                IF(EOMONTH(TODAY(), -2) = ENDOFMONTH('Calendar'[Date]), "Month before last", 
+			                    "Other")
+			            )
+			        )
+			    )
+			
+			
+			/*
+			current_month = 
+			VAR _maxyearmonth1 = CALCULATE(MAX('Calendar'[YearMonth]), FILTER('Calendar', NOT 'Calendar'[FutureDateEval]))
+			VAR _maxyearmonth2 = CALCULATE(MAX('Calendar'[YearMonth]), FILTER('Calendar', NOT 'Calendar'[FutureDateEval]))-1
+			VAR _maxyearmonth3 = CALCULATE(MAX('Calendar'[YearMonth]), FILTER('Calendar', NOT 'Calendar'[FutureDateEval]))-2
+			RETURN 
+			    IF('Calendar'[FutureDateEval], "Future Days", 
+			        IF('Calendar'[YearMonth] = _maxyearmonth1, "Current month",
+			            IF('Calendar'[YearMonth] = _maxyearmonth2, "Last month", 
+			                IF('Calendar'[YearMonth] = _maxyearmonth3, "Month before last", "Other")
+			            )
+			        )
+			    )
+			*/
+			```
+		lineageTag: 83b04be3-d3ff-48a6-a43d-ebf94dee8f61
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNum = MONTH('Calendar'[Date])
+		isHidden
+		formatString: 0
+		lineageTag: 20809cda-38c8-4a5b-bd18-b4beeedc0c2b
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayNum = DAY('Calendar'[Date])
+		isHidden
+		formatString: 0
+		lineageTag: b9c905b8-7409-4248-bc43-1e5eb6967fd4
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column FutureDateEval
+		dataType: string
+		isHidden
+		lineageTag: d46729f2-0f6d-4144-8427-c0e248d8b87f
+		summarizeBy: none
+		sourceColumn: FutureDateEval
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartOfWeek
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 61bd7269-c91a-4661-9004-76b202f18192
+		summarizeBy: none
+		sourceColumn: StartOfWeek
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Week
+		dataType: string
+		lineageTag: 124fe000-46ce-42a7-af6e-ac3525ece0de
+		summarizeBy: none
+		sourceColumn: Week
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: d9a3f861-897a-44ab-9dc0-6097edf88cc0
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Name'
+		dataType: string
+		isHidden
+		lineageTag: 6ad6e8e3-7cf7-453e-9566-eb2bdb818991
+		summarizeBy: none
+		sourceColumn: Day Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date - Copy'
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 7745c28d-4082-4312-835b-577e111a736e
+		summarizeBy: none
+		sourceColumn: Date - Copy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column WeekDE
+		dataType: string
+		lineageTag: 692dc09b-36ee-48ba-8d1d-d04799ad2b62
+		summarizeBy: none
+		sourceColumn: WeekDE
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearWeek2_DE
+		dataType: string
+		lineageTag: daa09007-26b9-41a6-a4da-6ecfa7db481c
+		summarizeBy: none
+		sourceColumn: YearWeek2_DE
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_week_id = ```
+			
+			VAR _maxyearweek1 = MAX('Calendar'[YearWeek])
+			VAR _maxyearweek2 = _maxyearweek1 - 1
+			VAR _maxyearweek3 = _maxyearweek1 - 2
+			VAR _maxyearweek4 = _maxyearweek1 - 3
+			VAR _maxyearweek5 = _maxyearweek1 - 4
+			VAR _maxyearweek6 = _maxyearweek1 - 5
+			RETURN 
+			    IF('Calendar'[YearWeek] = _maxyearweek1, 1,
+			            IF('Calendar'[YearWeek] = _maxyearweek2, 2,
+			                IF('Calendar'[YearWeek] = _maxyearweek3, 3,
+			                    IF('Calendar'[YearWeek] = _maxyearweek4, 4,
+			                        IF('Calendar'[YearWeek] = _maxyearweek5, 5, 6)
+			                    )
+			                )
+			            )
+			        )
+			```
+		formatString: 0
+		lineageTag: 3a206656-1dbd-4917-b135-847e97dff18a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = m
+		mode: import
+		source =
+				let
+				    StartDate = #date(2024, 1, 1),  // Replace with your actual start date if needed
+				    CurrentYear = Date.Year(DateTime.LocalNow()),
+				    EndDate = #date(CurrentYear, 12, 31),
+				    NumberOfDays = Number.From(EndDate) - Number.From(StartDate) + 1,
+				    Source = List.Dates(StartDate, NumberOfDays, #duration(1,0,0,0)),
+				    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Converted to Table",{{"Column1", type date}}),
+				    // Display only dates until today.
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [Column1] <= Date.From(DateTime.LocalNow())),
+				    #"Inserted Week of Year" = Table.AddColumn(#"Filtered Rows", "Week", each "CW" & Number.ToText(Date.WeekOfYear([Column1],Day.Friday),"D2")),
+				    #"Inserted Year" = Table.AddColumn(#"Inserted Week of Year", "Year", each Date.Year([Column1]), Int64.Type),
+				    #"Inserted Day Name" = Table.AddColumn(#"Inserted Year", "Day Name", each Date.DayOfWeekName([Column1], "en-US"), type text),
+				    #"Renamed Columns" = Table.RenameColumns(#"Inserted Day Name",{{"Column1", "Date"}}),
+				    #"Duplicated Date Column" = Table.DuplicateColumn(#"Renamed Columns", "Date", "Date - Copy"),
+				    #"Changed Type for Copy" = Table.TransformColumnTypes(#"Duplicated Date Column",{{"Date - Copy", type date}}),
+				    #"Added YearWeek" = Table.AddColumn(#"Changed Type for Copy", "YearWeek", each Number.ToText([Year]) & Number.ToText(Date.WeekOfYear([Date],Day.Friday),"D2")),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added YearWeek",{"Date", "Week", "YearWeek", "Year", "Day Name", "Date - Copy"}),
+				    #"Changed YearWeek Type" = Table.TransformColumnTypes(#"Reordered Columns",{{"YearWeek", Int64.Type}}),
+				    #"Added YearMonth" = Table.AddColumn(#"Changed YearWeek Type", "YearMonth", each Number.ToText([Year]) & Number.ToText(Date.Month([Date]),"D2")),
+				    #"Changed YearMonth Type" = Table.TransformColumnTypes(#"Added YearMonth",{{"YearMonth", Int64.Type}}),
+				    #"Added YearMonthName" = Table.AddColumn(#"Changed YearMonth Type", "YearMonthName", each Number.ToText([Year]) & "/" & Number.ToText(Date.Month([Date]),"D2")),
+				    #"Added WeekYear2" = Table.AddColumn(#"Added YearMonthName", "WeekYear2", each "CW " & Number.ToText(Date.WeekOfYear([Date],Day.Friday),"D2") & "/" & Number.ToText([Year])),
+				    #"Added Custom" = Table.AddColumn(#"Added WeekYear2", "YearWeek2_DE", each "KW " & Number.ToText(Date.WeekOfYear([Date],Day.Friday),"D2") & "/" & Number.ToText([Year])),
+				    #"Duplicated Week Column 2" = Table.DuplicateColumn(#"Added Custom", "Week", "Week - Copy - Copy"),
+				    #"Replaced CW with KW (German)" = Table.ReplaceValue(#"Duplicated Week Column 2","CW","KW",Replacer.ReplaceText,{"Week - Copy - Copy"}),
+				    #"Renamed Week Columns" = Table.RenameColumns(#"Replaced CW with KW (German)",{{"Week - Copy - Copy", "WeekDE"}}),
+				    #"Sorted by Date Desc" = Table.Sort(#"Renamed Week Columns",{{"Date", Order.Descending}}),
+				    #"Added FutureDateEval" = Table.AddColumn(#"Sorted by Date Desc", "FutureDateEval", each [Date] > DateTime.Date(DateTime.LocalNow())),
+				    #"Added StartOfWeek" = Table.AddColumn(#"Added FutureDateEval", "StartOfWeek", each Date.StartOfWeek([Date], Day.Friday), type date)
+				in
+				    #"Added StartOfWeek"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

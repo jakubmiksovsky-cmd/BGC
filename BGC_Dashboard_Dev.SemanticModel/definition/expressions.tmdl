@@ -1,0 +1,65 @@
+expression GetMaxDate =
+		()=>
+		let
+		    Source = Calendar[Date],
+		    #"Max Date" = List.Max(Source,1)
+		in
+		    #"Max Date"
+	lineageTag: 52079fb1-0dfd-420e-bd74-3b0a2b462fa0
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+expression QM_Atrribute_Sort =
+		let
+		    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("Vc8/C8IwEIfhr3JkrmBT/652SQctWLfQIeAhQmtKkgp+e3vJQcn6kDfcT2tx2TyMe2EQhdiKvtCihNqO02DeH7KS7W5tgNrMHheUjFc0fnYkVRSZpTu2LN0zrukhSpWlR7YsPTGu6TmKQvP9QRNw9HRwWrGWoBriNKQLdoLWPdHFt+ls/tCDuhHKHLuWcBnT/wE=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Attribute = _t, Index = _t]),
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Index", Int64.Type}}),
+		    #"Sorted Rows" = Table.Sort(#"Changed Type",{{"Index", Order.Ascending}})
+		in
+		    #"Sorted Rows"
+	lineageTag: d4d7fc24-ec5f-4a8c-bce5-0823171adb7e
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Language_Selection =
+		let
+		    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WcvVT0lFKzdMNDVaK1YlWcnEFclNSdYF0bCwA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Language = _t, Code = _t]),
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Language", type text}, {"Code", type text}})
+		in
+		    #"Changed Type"
+	lineageTag: 3500747f-2fcb-491c-b40b-cec96ef4d813
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Manualy filled into SP list and then transformed and connected to the ProAudit fact table.
+expression B-Targets =
+		let
+		    Source = SharePoint.Tables("https://volkswagengroup.sharepoint.com/sites/BGCDashboardQA/", [ApiVersion = 15]),
+		    #"6e0f057c-58a7-4785-8920-5dd019d37d70" = Source{[Id="6e0f057c-58a7-4785-8920-5dd019d37d70"]}[Items],
+		    #"Renamed Columns" = Table.RenameColumns(#"6e0f057c-58a7-4785-8920-5dd019d37d70",{{"ID", "ID.1"}}),
+		    #"Expanded AuditCode" = Table.ExpandRecordColumn(#"Renamed Columns", "AuditCode", {"field_1"}, {"field_1"}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Expanded AuditCode",{"field_1", "TargetB-Complaints", "validto", "validfrom", "Plant"}),
+		    #"Reordered Columns" = Table.ReorderColumns(#"Removed Other Columns",{"Plant", "field_1", "TargetB-Complaints", "validto", "validfrom"}),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Reordered Columns",{{"Plant", "plantid"}, {"field_1", "model_code"}}),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns1",{{"validto", Int64.Type}, {"validfrom", Int64.Type}, {"TargetB-Complaints", type number}, {"plantid", type text}, {"model_code", type text}}),
+		    #"Added Custom" = Table.AddColumn(#"Changed Type", "date", each {[validfrom]..[validto]}),
+		    #"Expanded date" = Table.ExpandListColumn(#"Added Custom", "date"),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Expanded date",{{"date", type date}}),
+		    #"Merged Queries" = Table.NestedJoin(#"Changed Type1", {"date"}, Calendar, {"Date"}, "Calendar", JoinKind.LeftOuter),
+		    #"Expanded Calendar" = Table.ExpandTableColumn(#"Merged Queries", "Calendar", {"YearWeek"}, {"Calendar.YearWeek"}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Expanded Calendar",{"validto", "validfrom", "date"}),
+		    #"Removed Duplicates" = Table.Distinct(#"Removed Columns"),
+		    #"Filtered Rows" = Table.SelectRows(#"Removed Duplicates", each ([Calendar.YearWeek] <> null))
+		in
+		    #"Filtered Rows"
+	lineageTag: dcb2a0f5-88e2-4f59-a042-057a5dde92aa
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,222 @@
+table LaMa_Car_fact
+	lineageTag: 7d51aa07-c4c8-4e1f-9a60-5750fba73571
+
+	column ANZEIGENAME
+		dataType: string
+		lineageTag: e7f77c5a-6e17-473b-96a1-5159870da222
+		summarizeBy: none
+		sourceColumn: ANZEIGENAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column BEANSTANDUNG
+		dataType: string
+		lineageTag: 0be4154e-d51e-495d-8042-eef24a1d6f02
+		summarizeBy: none
+		sourceColumn: BEANSTANDUNG
+
+		annotation SummarizationSetBy = Automatic
+
+	column FOLGE
+		dataType: string
+		lineageTag: 4e50871a-cf6f-4a44-8992-2ff5c1a96882
+		summarizeBy: none
+		sourceColumn: FOLGE
+
+		annotation SummarizationSetBy = Automatic
+
+	column URSACHE
+		dataType: string
+		lineageTag: 03373b5e-73cb-4ea8-ba3c-64c7ea7d1aef
+		summarizeBy: none
+		sourceColumn: URSACHE
+
+		annotation SummarizationSetBy = Automatic
+
+	column VERURSACHER_GRP
+		dataType: string
+		lineageTag: 54aa81b3-95cb-403d-81bb-437d0f6cd182
+		summarizeBy: none
+		sourceColumn: VERURSACHER_GRP
+
+		annotation SummarizationSetBy = Automatic
+
+	column VERURSACHER_ID
+		dataType: string
+		lineageTag: c1943e20-d920-47e7-8a88-1c779b293cda
+		summarizeBy: none
+		sourceColumn: VERURSACHER_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SM_ID
+		dataType: double
+		formatString: 0
+		lineageTag: 60272a59-346e-407a-87a2-8cc2187270a6
+		summarizeBy: count
+		sourceColumn: SM_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column WERK_ID
+		dataType: string
+		lineageTag: 352c6c63-d24a-4202-aea7-8bc18e48b47e
+		summarizeBy: none
+		sourceColumn: WERK_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column WERK
+		dataType: string
+		lineageTag: 691e21b6-314e-4f5a-a4dd-03e92e7a377c
+		summarizeBy: none
+		sourceColumn: WERK
+
+		annotation SummarizationSetBy = Automatic
+
+	column TITEL
+		dataType: string
+		lineageTag: 5bac97dc-64af-43ec-8b64-674f82780635
+		summarizeBy: none
+		sourceColumn: TITEL
+
+		annotation SummarizationSetBy = Automatic
+
+	column MASSNAHME
+		dataType: string
+		lineageTag: 0cdb8e2d-676f-4401-a7b2-1b33d3761c65
+		summarizeBy: none
+		sourceColumn: MASSNAHME
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATUS_ID
+		dataType: double
+		lineageTag: d6ba9c08-ab01-44ea-8200-4db00dd5ec2e
+		summarizeBy: count
+		sourceColumn: STATUS_ID
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column STATUS
+		dataType: string
+		lineageTag: 5538db39-2924-4edf-9f71-a421592fbbb3
+		summarizeBy: none
+		sourceColumn: STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column MODELL_FAMILIE
+		dataType: string
+		lineageTag: 80bfad3f-bf00-4b8c-aa6b-fdd04442af37
+		summarizeBy: none
+		sourceColumn: MODELL_FAMILIE
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'BERICHTSWOCHE.FROM'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 07cab70c-9e2e-467b-a251-517c743dc825
+		summarizeBy: none
+		sourceColumn: BERICHTSWOCHE.FROM
+
+		variation Variation
+			isDefault
+			relationship: ff433947-5c02-4066-b4b7-e5901fd4a0ad
+			defaultHierarchy: LocalDateTable_5205c048-25b9-4a43-8f84-00fb3409a2e9.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'BERICHTSWOCHE.TO'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 749a0b7e-4f02-4c7d-951c-c9733c6fb1bd
+		summarizeBy: none
+		sourceColumn: BERICHTSWOCHE.TO
+
+		variation Variation
+			isDefault
+			relationship: 551024a4-0e24-4f7a-a005-01b0f6ab9660
+			defaultHierarchy: LocalDateTable_ec36966e-b1b1-47a0-8403-c25e7ef690ac.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column KW
+		dataType: int64
+		formatString: 0
+		lineageTag: b217e9bd-a963-441e-a5a8-b9b2f9c19df0
+		summarizeBy: none
+		sourceColumn: KW
+
+		annotation SummarizationSetBy = Automatic
+
+	column Model_Werk_Lama_Key
+		dataType: string
+		lineageTag: d7795b19-6467-4282-aa68-73fa54211fd6
+		summarizeBy: none
+		sourceColumn: Model_Werk_Lama_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column FAHRZEUGE
+		dataType: double
+		lineageTag: 5f250be5-4f55-40ca-937b-84a32dfdb774
+		summarizeBy: sum
+		sourceColumn: FAHRZEUGE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SM_ID2
+		dataType: double
+		lineageTag: 888bce0a-94e2-4e12-bcc9-09aef0a99cc7
+		summarizeBy: sum
+		sourceColumn: SM_ID2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ENTSPERRUNG_TS
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5d115410-af7f-4634-868d-8ae3b65fc6a2
+		summarizeBy: none
+		sourceColumn: ENTSPERRUNG_TS
+
+		variation Variation
+			isDefault
+			relationship: db146ba0-34e5-4011-8054-ff309a23e64d
+			defaultHierarchy: LocalDateTable_c2b5e573-8bbf-4ae8-80be-f475e4da6697.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition LaMa_Car_fact = m
+		mode: import
+		queryGroup: 'LaMa.car'
+		source =
+				let
+				    Source = Oracle.Database("ivorapz06.in.audi.vwg:15300/apexvertraulich_p.ing.audi.vwg", [HierarchicalNavigation=true, Query="SELECT#(lf)hist.SM_ID#(lf),hist.MODELL_FAMILIE#(lf),hist.SPERRAUFTRAEGE_AKTIV_BW_ENDE AS ""FAHRZEUGE""#(lf),hist.BERICHTSWOCHE#(lf),hist.KW#(lf)--,hist.BERICHTSWOCHE_ID#(lf),fact.ANZEIGENAME#(lf),fact.BEANSTANDUNG#(lf),fact.FOLGE#(lf),fact.URSACHE#(lf),fact.VERURSACHER_GRP#(lf),fact.VERURSACHER_ID#(lf),fact.SM_ID#(lf),fact.WERK_ID#(lf),fact.WERK#(lf),fact.TITEL#(lf),fact.MASSNAHME#(lf)--,fact.VSI_KW#(lf)--,fact.VSI_KW_START#(lf),fact.STATUS_ID#(lf),fact.STATUS#(lf)--,fact.FAHRZEUGE#(lf),fact.ENTSPERRUNG_TS#(lf)FROM QUBE_S_ADMIN.BGC_R_SPERRUNG_V2 hist#(lf)LEFT JOIN QUBE_S_ADMIN.BGC_SPERRUNG_V1 fact on hist.SM_ID = fact.SM_ID#(lf)ORDER BY hist.KW DESC#(lf)"]),
+				    #"Extracted First Characters" = Table.TransformColumns(Source, {{"WERK_ID", each Text.Start(Text.From(_, "cs-CZ"), 2), type text}}),
+				    #"Extracted Text Before Delimiter" = Table.TransformColumns(#"Extracted First Characters", {{"ANZEIGENAME", each Text.BeforeDelimiter(_, "_", {0, RelativePosition.FromEnd}), type text}}),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Extracted Text Before Delimiter", "BERICHTSWOCHE", Splitter.SplitTextByDelimiter("-", QuoteStyle.Csv), {"BERICHTSWOCHE.FROM", "BERICHTSWOCHE.TO"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"BERICHTSWOCHE.FROM", type date}, {"BERICHTSWOCHE.TO", type date}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Changed Type","/","",Replacer.ReplaceText,{"KW"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Replaced Value",{{"KW", Int64.Type}}),
+				    #"Extracted Text After Delimiter" = Table.TransformColumns(#"Changed Type1", {{"MODELL_FAMILIE", each Text.AfterDelimiter(_, " "), type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Extracted Text After Delimiter", "Model_Werk_Lama_Key", each [WERK_ID]&"-"&[MODELL_FAMILIE])
+				in
+				    #"Added Custom"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,48 @@
+table Region/Plant
+	lineageTag: 550fabc4-7ada-4e43-b813-3b58b9db5e79
+
+	column Region/Plant
+		lineageTag: 153fd766-03ce-4ffd-b00f-0e042de67883
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Region/Plant Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Region/Plant Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Region/Plant Fields'
+		isHidden
+		lineageTag: 53458647-fe8a-4e4a-90f2-f243015e2ddd
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Region/Plant Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Region/Plant Order'
+		isHidden
+		formatString: 0
+		lineageTag: 66b6fc2b-90fe-4289-a596-d2f47db19a01
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Region/Plant = calculated
+		mode: import
+		source =
+				{
+				    ("Werk", NAMEOF('ProAudit_Models_dim'[plant]), 0),
+				    ("Region", NAMEOF('ProAudit_Models_dim'[region]), 1)
+				}
+
+	annotation PBI_Id = dde411100e634b2187cc6d3d9794084c
+

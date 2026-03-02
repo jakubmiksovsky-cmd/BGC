@@ -1,0 +1,361 @@
+table Measures_Table
+	lineageTag: 0f0fa6f8-b9ca-4574-8350-f952698ce0df
+
+	/// Unique number of vins
+	measure 'Audited Cars' = SUM(ProAudit_Results_fact[Audited Cars])
+		formatString: #,0
+		displayFolder: 7 All
+		lineageTag: 851a3011-b88c-45b7-9abf-b466a4b2b3b3
+
+	measure 'Max QK' = MAX(ProAudit_Results_fact[Max Note])
+		formatString: #,0.0
+		displayFolder: 7 All
+		lineageTag: 4a090e51-ef40-4a99-aa23-8f178f2c4eb2
+
+	/// Average mark recieved by cars at the end of the audit. The car's mark describes car quality based on faults and overall audit
+	measure 'Ø QK' = AVERAGE(ProAudit_Results_fact[Ø Note])
+		formatString: #,0.0
+		displayFolder: 7 All
+		lineageTag: c4f52800-101e-4655-bfea-80892896ea7d
+
+	measure 'Min QK' = MIN(ProAudit_Results_fact[Min Note])
+		formatString: #,0.0
+		displayFolder: 7 All
+		lineageTag: 6998e52c-40f3-405d-af02-4eff7aaefa71
+
+	/// Average of medium gravity faults which have to be repaired but are not fatal
+	measure 'Ø B,B1' = AVERAGE(ProAudit_Results_fact[B/Fzg])
+		formatString: #,0.00
+		displayFolder: 7 All
+		lineageTag: cff66163-15b1-4e8e-9a51-47825cad1b1e
+
+	/// Average of small gravity faults with no big impact on customer satisfaction
+	measure 'Ø C1' = AVERAGE(ProAudit_Results_fact[C/Fzg])
+		displayFolder: 7 All
+		lineageTag: 9d214e5e-d6cd-450e-a59d-621f7f18fb2e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure CurrentMonthNum = CALCULATE(MAX('Calendar'[YearMonthName]), 'Calendar'[current_month] = "Current month")
+		displayFolder: 2 Dynamic Titles
+		lineageTag: fb34b5f8-32c5-49a2-ad22-9289554945c1
+
+	measure 'Selected Period Name' = IF(HASONEVALUE('Calendar'[current_week]),"Week",IF(HASONEVALUE('Calendar'[current_month]),"Month",""))
+		displayFolder: 2 Dynamic Titles
+		lineageTag: 8d328c1d-509f-4afa-b491-5e6d9daca6a8
+
+	measure 'Target QK' = AVERAGE(ProAudit_Results_fact[Target Note])
+		formatString: 0.0
+		displayFolder: 3 Targets
+		lineageTag: 8385f873-9b41-438f-891b-3a1c2c48e5da
+
+	measure 'Target Ø B' = ```
+			VAR _target = MAX(ProAudit_Results_fact[TargetB-Complaints])
+			                RETURN IF(ISBLANK(_target), 1, _target)
+			
+			```
+		displayFolder: 3 Targets
+		lineageTag: 08bcbe19-2944-4283-82a0-6f4e99b9ebf1
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Model Code Name' = IF(HASONEVALUE(ProAudit_Models_dim[Model]),MAX(ProAudit_Models_dim[Model])," ")
+		displayFolder: 2 Dynamic Titles
+		lineageTag: b82da427-523d-43cc-a475-aca3bd7bf0e8
+
+	measure Footer = CONCATENATE("Q-Wochenbericht ", [Selected Week] & "/" &MAX('Calendar'[Year]))
+		displayFolder: 2 Dynamic Titles
+		lineageTag: 796a0500-877b-4553-895b-1f84a3d869c1
+
+	measure Selected_Month_Value = SELECTEDVALUE('Calendar'[YearMonthName],"")
+		displayFolder: 2 Dynamic Titles
+		lineageTag: 76313b8f-b291-4f17-bcf5-63fcd709ec54
+
+	/// Average of serious or fatal faults which are ,,no go" and should be with red flag
+	measure 'Ø A,A1' = AVERAGE(ProAudit_Results_fact[A/Fzg])
+		formatString: 0.00
+		displayFolder: 7 All
+		lineageTag: 98137bb0-e9a1-4e18-9707-cfb12bd0632b
+
+	measure 'Selected Week' = IF(HASONEVALUE('Calendar'[WeekDE]),SELECTEDVALUE('Calendar'[WeekDE]),"-")
+		displayFolder: 2 Dynamic Titles
+		lineageTag: 4a253b04-ed1a-43bc-a9aa-406da15ad6b9
+
+	measure 'QK Target Fulfilment' = ```
+			
+			    VAR _targetbase = [Target QK]
+			    VAR _firstinterval = IF(round([Ø QK], 2) < _targetbase + 0.2001, 1, 0)
+			    VAR _secondinterval = IF(AND(round([Ø QK], 2) >= _targetbase + 0.2001, round([Ø QK], 2) < _targetbase + 0.4001), 1, 0)
+			
+			    RETURN 
+			        IF(_firstinterval = 1, 0, IF(_secondinterval = 1, 1, 2))
+			    // VAR _targetbase = [Target Note]
+			    // VAR _firstinterval = IF(round([Ø Note], 2) <= _targetbase + 0.2001, 1, 0)
+			    // VAR _secondinterval = IF(round([Ø Note], 2) <= _targetbase + 0.3001, 1, 0)
+			
+			    // RETURN 
+			    //     IF(_firstinterval = 1, 0, IF(_secondinterval = 1, 1, 2))
+			```
+		formatString: 0
+		displayFolder: 3 Targets
+		lineageTag: 011c5c91-0e5e-4561-acb1-cb6bf7716f59
+
+	measure 'Cars without AB' = SUM(ProAudit_Results_fact[Cars without AB])
+		formatString: #,0
+		displayFolder: 7 All
+		lineageTag: cf4ed910-3e71-4186-ab89-946e322cb08f
+
+	measure 'Cars without AB (%)' = AVERAGE(ProAudit_Results_fact[Cars without AB %])
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		displayFolder: 7 All
+		lineageTag: b5bcc912-8bb6-4f1d-85ed-c75ade960871
+
+	measure 'Hold Notice Flag' = IF([Hold Notices] = 0, 0, 1)
+		formatString: 0
+		displayFolder: 2 Dynamic Titles
+		lineageTag: d7f0c5fc-151a-49bf-b3fc-923c7ca5833e
+
+	measure 'Hold Notices' =
+			VAR _cnt = DISTINCTCOUNT(LaMa_Car_fact[ANZEIGENAME])
+			                RETURN IF(ISBLANK(_cnt), 0, _cnt)
+		formatString: 0
+		displayFolder: 7 All
+		lineageTag: ecd761a6-7329-4779-9226-11e861c648ed
+
+	measure 'Target QK Selection' = IF(HASONEVALUE(ProAudit_Models_dim[Model]), [Target QK], BLANK() )
+		formatString: 0.0
+		displayFolder: 3 Targets
+		lineageTag: 4c9d3978-f442-487e-9662-dbc447fce7dd
+
+	measure 'Target B Selection' = IF(HASONEVALUE(ProAudit_Models_dim[Model]), [Target Ø B], BLANK() )
+		formatString: #,0.0
+		displayFolder: 3 Targets
+		lineageTag: ac8b503d-59b8-42ec-bac8-4f02c48c49c0
+
+	measure 'Blocked Cars' = SUM(LaMa_Car_fact[FAHRZEUGE])
+		formatString: #,0
+		displayFolder: 7 All
+		lineageTag: b6ac0071-d361-4690-9cb2-dee422e2bc7a
+
+	measure 'B,B1 Target Fulfilment' = ```
+			
+			    VAR _target = [Target Ø B]
+			    VAR _firstinterval = IF(ROUND([Ø B,B1], 2) < _target + 0.4001, 1, 0)
+			    VAR _secondinterval = IF(AND(ROUND([Ø B,B1], 2) >= _target + 0.4001, ROUND([Ø B,B1], 2) < _target + 0.9001), 1, 0)
+			
+			    RETURN 
+			    IF(_firstinterval = 1, 0, IF(_secondinterval = 1, 1, 2))
+			```
+		formatString: 0
+		displayFolder: 3 Targets
+		lineageTag: e43e521e-cf52-42f7-9be9-8d742b6aca5a
+
+	measure 'Ø QK (LM)' =
+			
+			VAR _FirstDateInSelectedWeek =
+			    MIN ( 'Calendar'[Date] )
+			VAR _LastDateOfPreviousWeek = _FirstDateInSelectedWeek - 1
+			VAR _PreviousYearWeek =
+			    LOOKUPVALUE (
+			        'Calendar'[YearWeek],
+			        'Calendar'[Date],
+			        _LastDateOfPreviousWeek
+			    )
+			RETURN
+			    CALCULATE (
+			        [Ø QK],
+			        FILTER ( ALL ( 'Calendar' ), 'Calendar'[YearWeek] = _PreviousYearWeek )
+			    )
+		formatString: 0.00
+		displayFolder: 7 All
+		lineageTag: 1a176b47-c7a8-4bee-8477-75ced0f7f424
+
+	measure 'Ø QK (LW)' = ```
+			
+			VAR _FirstDateInSelectedWeek =
+			    MIN ( 'Calendar'[Date] )
+			VAR _LastDateOfPreviousWeek = _FirstDateInSelectedWeek - 1
+			VAR _PreviousYearWeek =
+			    LOOKUPVALUE (
+			        'Calendar'[YearWeek],
+			        'Calendar'[Date],
+			        _LastDateOfPreviousWeek
+			    )
+			RETURN
+			    CALCULATE (
+			        [Ø QK],
+			        FILTER ( ALL ( 'Calendar' ), 'Calendar'[YearWeek] = _PreviousYearWeek )
+			    )
+			
+			```
+		displayFolder: 7 All
+		lineageTag: 862d34b9-adcc-4959-9f75-791ddfda7557
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ø B,B1 (LM)' = ```
+			
+			    VAR FirstDateInSelectedMonth =
+			    MIN ( 'Calendar'[Date] )
+			VAR LastDateOfPreviousMonth = FirstDateInSelectedMonth - 1
+			VAR PreviousYearMonth =
+			    LOOKUPVALUE (
+			        'Calendar'[YearMonth],
+			        'Calendar'[Date],
+			        LastDateOfPreviousMonth
+			    )
+			RETURN
+			    CALCULATE (
+			        [Ø B,B1],
+			        FILTER ( ALL ( 'Calendar' ), 'Calendar'[YearMonth] = PreviousYearMonth )
+			    )
+			```
+		formatString: 0.00
+		displayFolder: 7 All
+		lineageTag: b92b923f-4a6b-4509-8be5-af8e508ea293
+
+	measure 'Ø B,B1 (LW)' = ```
+			
+			VAR _FirstDateInSelectedWeek =
+			    MIN ( 'Calendar'[Date] )
+			VAR _LastDateOfPreviousWeek = _FirstDateInSelectedWeek - 1
+			VAR _PreviousYearWeek =
+			    LOOKUPVALUE (
+			        'Calendar'[YearWeek],
+			        'Calendar'[Date],
+			        _LastDateOfPreviousWeek
+			    )
+			RETURN
+			    CALCULATE (
+			        [Ø B,B1],
+			        FILTER ( ALL ( 'Calendar' ), 'Calendar'[YearWeek] = _PreviousYearWeek )
+			    )
+			
+			```
+		formatString: 0.00
+		displayFolder: 7 All
+		lineageTag: 6e8cd05c-9f5f-4ad1-a182-c3f93063200f
+
+	measure 'Model Selection Check' = IF(HASONEVALUE(ProAudit_Models_dim[Model]), 1, 0)
+		formatString: 0
+		displayFolder: 2 Dynamic Titles
+		lineageTag: 97a2eb85-2df9-4e88-935f-41267fa88a32
+
+	measure 'QK Target Fulfilment Dyn' = ```
+			
+			-- This measure returns a number (0, 1, or 2) to conditionally format a visual.
+			-- 0 = Green, 1 = Yellow, 2 = Red
+			
+			VAR _currentBrand = 
+			    SELECTEDVALUE('ProAudit_Models_dim'[group_brand]) -- Get the brand in the current filter context.
+			
+			VAR _currentQKValue = 
+			    [Ø QK]
+			
+			RETURN
+			    SWITCH(
+			        _currentBrand,
+			        "Volkswagen",
+			        // Logic for VW: <0.3 (Green), 0.3-0.4 (Yellow), >0.4 (Red)
+			        IF(_currentQKValue < [Target QK] + 0.3, 0,
+			            IF(_currentQKValue <= [Target QK] + 0.4, 1, 2)
+			        ),
+			
+			        "Volkswagen NFZ",
+			        // Logic for VW Commercial Vehicles: <0.4 (Green), 0.4-0.5 (Yellow), >0.5 (Red)
+			        IF(_currentQKValue < [Target QK] + 0.4, 0,
+			            IF(_currentQKValue <= [Target QK] + 0.5, 1, 2)
+			        ),
+			
+			        "Skoda",
+			        // Logic for Skoda: <0.3 (Green), =0.3 (Yellow), >0.3 (Red)
+			        IF(_currentQKValue < [Target QK] + 0.3, 0,
+			            IF(_currentQKValue = [Target QK] + 0.3, 1, 2)
+			        ),
+			
+			        "Seat / Cupra",
+			        // Logic for Seat/Cupra: <15% (Green), 15%-<30% (Yellow), >=30% (Red)
+			        IF(_currentQKValue < [Target QK] * 1.15, 0,
+			            IF(_currentQKValue < [Target QK] * 1.3, 1, 2)
+			        ),
+			
+			        -- A default value if the brand is none of the above.
+			        0
+			    )
+			```
+		formatString: 0
+		displayFolder: 3 Targets
+		lineageTag: 888f07f7-b839-47a6-851d-0f0972dfd4b8
+
+	measure 'B,B1 Target Fulfilment Dyn' = ```
+			
+			-- This measure returns a number (0, 1, or 2) to conditionally format a visual.
+			-- 0 = Green, 1 = Yellow, 2 = Red
+			
+			VAR _currentBrand = 
+			    SELECTEDVALUE('ProAudit_Models_dim'[group_brand]) -- Get the brand in the current filter context.
+			
+			VAR _currentBValue = 
+			    [Ø B,B1]
+			
+			RETURN
+			    SWITCH(
+			        _currentBrand,
+			        "Volkswagen",
+			        // Logic for VW: <0.45 (Green), 0.45-0.94 (Yellow), >0.94 (Red)
+			        IF(_currentBValue < [Target Ø B] + 0.45, 0,
+			            IF(_currentBValue <= [Target Ø B] + 0.94, 1, 2)
+			        ),
+			
+			        "Volkswagen NFZ",
+			        // Logic for VW Commercial Vehicles: <0.55 (Green), 0.55-0.95 (Yellow), >0.95 (Red)
+			        IF(_currentBValue < [Target Ø B] + 0.55, 0,
+			            IF(_currentBValue <= [Target Ø B] + 0.95, 1, 2)
+			        ),
+			
+			        "Skoda",
+			        // Logic for Skoda: <0.05 (Green), 0.05-0.14 (Yellow), >0.14 (Red)
+			        IF(_currentBValue < [Target Ø B] + 0.05, 0,
+			            IF(_currentBValue <= [Target Ø B] + 0.14, 1, 2)
+			        ),
+			
+			        "Seat / Cupra",
+			        // Logic for Seat/Cupra: <15% (Green), 15%-<30% (Yellow), >=30% (Red)
+			        IF(_currentBValue < [Target Ø B] * 1.15, 0,
+			            IF(_currentBValue < [Target Ø B] * 1.30, 1, 2)
+			        ),
+			
+			        -- A default value if the brand is none of the above.
+			        0
+			    )
+			```
+		formatString: 0
+		displayFolder: 3 Targets
+		lineageTag: 9f1e4aae-ed1d-4731-8fb1-7b4fd9514408
+
+	measure 'Blocked Cars (no_blank)' = IF(ISBLANK([Blocked Cars]), 0, [Blocked Cars])
+		displayFolder: 7 All
+		lineageTag: af540f06-3cfa-4843-aebf-737081aca5d5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Information = "i"
+		displayFolder: 2 Dynamic Titles
+		lineageTag: c080ab6e-c6bc-4a9b-ac05-f709d4efda5b
+
+	partition Measures_Table = m
+		mode: import
+		source =
+				let
+				Source = #table(type table[Date Last Refreshed=datetime], {{DateTimeZone.FixedUtcNow() + #duration(0,2,0,0)}}),
+				    #"Změněný typ s národním prostředím" = Table.TransformColumnTypes(Source, {{"Date Last Refreshed", type datetime}}, "cs-CZ"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Změněný typ s národním prostředím",{"Date Last Refreshed"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

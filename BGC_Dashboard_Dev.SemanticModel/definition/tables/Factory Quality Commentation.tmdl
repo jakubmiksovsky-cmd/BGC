@@ -1,0 +1,107 @@
+table 'Factory Quality Commentation'
+	lineageTag: f8b9dc22-4fb3-4911-bd37-bedda842efa8
+
+	column Title
+		dataType: string
+		lineageTag: f6a4a718-6718-4c69-892e-08eb09d6fa09
+		summarizeBy: none
+		sourceColumn: Title
+
+		annotation SummarizationSetBy = Automatic
+
+	column SP_model_code
+		dataType: string
+		lineageTag: 6b1181ec-9e28-4f33-9b67-5df9f0a46fef
+		summarizeBy: none
+		sourceColumn: SP_model_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column PA_plant_id
+		dataType: string
+		lineageTag: 7e2e1b03-4b41-421b-b627-228e222c887d
+		summarizeBy: none
+		sourceColumn: PA_plant_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column PA_group_brand
+		dataType: string
+		lineageTag: c5504cc8-db0d-4c78-9aac-61926a85cad8
+		summarizeBy: none
+		sourceColumn: PA_group_brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PA_dim.code'
+		dataType: string
+		lineageTag: 5bf54b16-8671-4cf7-b6ea-6f33c50e86cb
+		summarizeBy: none
+		sourceColumn: PA_dim.code
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: 2c5aaa06-c4f1-4b9c-9346-08e5d36381ac
+		summarizeBy: none
+		sourceColumn: YearWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column Attribute
+		dataType: string
+		lineageTag: ef4d30a3-fd5f-4e2d-b594-1a9a85243de3
+		summarizeBy: none
+		sourceColumn: Attribute
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: string
+		lineageTag: 7b728818-c764-4899-9f50-713a05d5a9f2
+		summarizeBy: none
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 4ed32b08-6b64-4af6-a2fe-80562563e2c9
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Factory Quality Commentation' = m
+		mode: import
+		queryGroup: 'Factory QM'
+		source =
+				let
+				    Source = SharePoint.Tables("https://volkswagengroup.sharepoint.com/sites/BGCDashboardQA/", [ApiVersion = 15]),
+				    #"Filtered Rows" = Table.SelectRows(Source, each Text.EndsWith([Title], "Factory Quality Commentation")),
+				    #"Expanded Items" = Table.ExpandTableColumn(#"Filtered Rows", "Items", {"Title", "CW", "Year", "Complaint1", "RootCause1", "Measurement1", "Complaint2", "RootCause2", "Measurement2", "Complaint3", "RootCause3", "Measurement3", "Roadtestbreakdowns", "Miscelleanous", "ModelName"}, {"Title.1", "CW", "Year", "Complaint1", "RootCause1", "Measurement1", "Complaint2", "RootCause2", "Measurement2", "Complaint3", "RootCause3", "Measurement3", "Roadtestbreakdowns", "Miscelleanous", "ModelName"}),
+				    #"Expanded ModelName" = Table.ExpandRecordColumn(#"Expanded Items", "ModelName", {"Title"}, {"Title.2"}),
+				    #"Added YearWeek" = Table.AddColumn(#"Expanded ModelName", "YearWeek", each [Year]&[CW]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added YearWeek",{{"YearWeek", Int64.Type}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Changed Type",{"Title", "Complaint1", "RootCause1", "Measurement1", "Complaint2", "RootCause2", "Measurement2", "Complaint3", "RootCause3", "Measurement3", "Roadtestbreakdowns", "Miscelleanous", "Title.2", "YearWeek"}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Other Columns", {"Title", "Title.2", "YearWeek"}, "Attribute", "Value"),
+				    #"Merged Queries" = Table.NestedJoin(#"Unpivoted Other Columns", {"Title.2"}, ProAudit_Models_dim, {"Model"}, "ProAudit_Models_dim", JoinKind.LeftOuter),
+				    #"Expanded ProAudit_Models_dim" = Table.ExpandTableColumn(#"Merged Queries", "ProAudit_Models_dim", {"plant_id", "group_brand", "code"}, {"ProAudit_Models_dim.plant_id", "ProAudit_Models_dim.group_brand", "ProAudit_Models_dim.code"}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Expanded ProAudit_Models_dim",{"Title", "ProAudit_Models_dim.plant_id", "ProAudit_Models_dim.group_brand", "ProAudit_Models_dim.code", "Title.2", "YearWeek", "Attribute", "Value"}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Reordered Columns", "Attribute", "Attribute - Copy"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Duplicated Column",{{"Attribute - Copy", "Type"}}),
+				    // Cleaning attribue - Complains, Root Cause, ... For filtering in dashboard.
+				    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns","1","",Replacer.ReplaceText,{"Type"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","2","",Replacer.ReplaceText,{"Type"}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","3","",Replacer.ReplaceText,{"Type"}),
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","4","",Replacer.ReplaceText,{"Type"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Replaced Value3",{{"ProAudit_Models_dim.plant_id", "PA_plant_id"}, {"ProAudit_Models_dim.group_brand", "PA_group_brand"}, {"ProAudit_Models_dim.code", "PA_dim.code"}, {"Title.2", "SP_model_code"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

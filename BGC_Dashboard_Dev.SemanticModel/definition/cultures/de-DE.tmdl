@@ -1,0 +1,109 @@
+cultureInfo de-DE
+	translations
+		model Model
+			table Measures_Table
+				measure 'Audited Cars'
+					caption: Geprüfte Fahrzeuge
+					description: Fahrzeug nach Audit
+				measure 'Target QK'
+					caption: Ziel QK
+				measure 'Target Ø B'
+					caption: Ziel Ø B
+				measure 'Cars without AB'
+					caption: A-/B-Fehlerfreiheit
+				measure 'Cars without AB (%)'
+					caption: A-/B-Fehlerfreiheit (%)
+				measure 'Hold Notices'
+					caption: Anz. Sperrmitteilungen
+				measure 'Target B Selection'
+					caption: Ziel B
+				measure 'Blocked Cars'
+					caption: Gesperrte Fahrzeuge
+				measure 'Blocked Cars (no_blank)'
+					caption: Blockierte Fahrzeuge
+			table Calendar
+				column YearWeek
+					caption: JahrWoche
+				column WeekYear2
+					caption: Woche
+				column Year
+					caption: Jahr
+				measure 'Last Date'
+					caption: Letztes Datum
+				measure 'Selected YearWeek'
+					caption: JahrWoche
+			table ProAudit_Models_dim
+				column plant_id
+					caption: Werk ID
+				column plant
+					caption: Werk
+				column region
+					caption: Region
+				column Model
+					caption: Modell
+				column group_brand
+					caption: Marke
+			table ProAudit_Results_fact
+				column YearWeek
+					caption: JahrWoche
+				column plant_name
+					caption: Werk
+				column plant_id
+					caption: Werk ID
+				column Brand
+					caption: Marke
+				column model_name
+					caption: Modell
+				column model_code
+					caption: Modell Code
+				column 'Audited Cars'
+					caption: Fahrzeug nach Audit
+				column 'Target Note'
+					caption: Ziel Note
+				column 'Cars without AB'
+					caption: Autos ohne Fehler
+				column 'Cars without AB %'
+					caption: Autos ohne AB (%)
+			table LaMa_Car_fact
+				column ANZEIGENAME
+					caption: Anzeigename
+				column BEANSTANDUNG
+					caption: Beanstandung
+				column FOLGE
+					caption: Folge
+				column URSACHE
+					caption: Ursache
+				column VERURSACHER_GRP
+					caption: Verursacher
+				column VERURSACHER_ID
+					caption: Verursacher ID
+				column SM_ID
+					caption: SM ID
+				column WERK_ID
+					caption: Werk ID
+				column WERK
+					caption: Werk
+				column TITEL
+					caption: Titel
+				column MASSNAHME
+					caption: Massnahme
+				column STATUS_ID
+					caption: Status ID
+				column STATUS
+					caption: Status
+				column FAHRZEUGE
+					caption: Gesperrte Fahrzeuge
+			table 'Factory Quality Commentation'
+				column Title
+					caption: Titel
+				column SP_model_code
+					caption: Modell
+				column PA_group_brand
+					caption: Marke
+				column Attribute
+					caption: Attribut
+				column Value
+					caption: Text
+				column Type
+					caption: Typ
+

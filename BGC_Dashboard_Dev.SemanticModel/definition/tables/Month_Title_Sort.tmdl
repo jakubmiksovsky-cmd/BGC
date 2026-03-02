@@ -1,0 +1,43 @@
+table Month_Title_Sort
+	isHidden
+	lineageTag: 6b937b5d-966a-4218-83b5-bdff9717ddf9
+
+	column Month_Title
+		dataType: string
+		isHidden
+		lineageTag: 61cd52db-5eda-41d3-9a38-e2136e02ca7c
+		summarizeBy: none
+		sourceColumn: Month_Title
+		sortByColumn: Index
+
+		changedProperty = IsHidden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index
+		dataType: double
+		isHidden
+		formatString: 0
+		lineageTag: f12e4397-7268-4ee9-b6e5-a2603a2a042c
+		summarizeBy: none
+		sourceColumn: Index
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Month_Title_Sort = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45Wci4tKkrNK1HIzc8ryVCK1YlW8kksRub6glgKSalp+UWpCjlAObCof0lGapFSbCwA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Month_Title = _t]),
+				    #"Added Index" = Table.AddIndexColumn(Source, "Index", 1, 1)
+				in
+				    #"Added Index"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,128 @@
+table ProAudit_Models_dim
+	lineageTag: e3d9c024-019d-4b0a-b6ba-6ebf1f9e5241
+
+	measure 'Table Rank top10 Note' =
+			
+			VAR _rank = [Ø QK] + DIVIDE(MAX(ProAudit_Models_dim[index]), 100000)
+			VAR _condition = 2 * [QK Target Fulfilment]
+			RETURN _rank + _condition
+		isHidden
+		lineageTag: ad531783-3847-49b3-a795-458b4aafa47d
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Table Rank top10 B' = [Ø B,B1] + DIVIDE(MAX(ProAudit_Models_dim[index]), 100000)
+		isHidden
+		lineageTag: 72808067-1957-46d9-9e21-a0ab4ca2c34a
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column plant_id
+		dataType: string
+		lineageTag: 9a4355d2-563c-4fd7-b7c7-73616355f7ff
+		summarizeBy: none
+		sourceColumn: plant_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column plant
+		dataType: string
+		lineageTag: 9caffbf9-98b7-42bb-9559-d8870bd995e5
+		summarizeBy: none
+		sourceColumn: plant
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: 67ac0389-e97e-4667-9cf4-0c54cbbab393
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Model
+		dataType: string
+		lineageTag: f25a3341-a50a-4922-9a14-db7644fd0e20
+		summarizeBy: none
+		sourceColumn: Model
+
+		annotation SummarizationSetBy = Automatic
+
+	column group_brand
+		dataType: string
+		lineageTag: 334bde34-c57d-4191-b449-79d8e1614bf2
+		summarizeBy: none
+		sourceColumn: group_brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column code
+		dataType: string
+		lineageTag: bb544348-abe3-4803-aa28-e1f69d92aa95
+		summarizeBy: none
+		sourceColumn: code
+
+		annotation SummarizationSetBy = Automatic
+
+	column index
+		dataType: int64
+		formatString: 0
+		lineageTag: dc7e1352-fc3e-4e82-a719-846d92f38225
+		summarizeBy: sum
+		sourceColumn: index
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelCodeExtract
+		dataType: string
+		lineageTag: 95ebb9cd-1abb-44ca-9648-c992f3d216c0
+		summarizeBy: none
+		sourceColumn: ModelCodeExtract
+
+		annotation SummarizationSetBy = Automatic
+
+	column Model_Werk_Lama_Key
+		dataType: string
+		lineageTag: 099a8ba7-2302-4cd8-a35c-ebcc90e3dae6
+		summarizeBy: none
+		sourceColumn: Model_Werk_Lama_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ProAudit_Models_dim = m
+		mode: import
+		queryGroup: ProAudit
+		source =
+				let
+				    Source = AnalysisServices.Database("powerbi://api.powerbi.com/v1.0/myorg/WS_0103_ProAudit%20Reporting%20QA_VWCO", "VWAG_ProAudit", [Implementation="2.0", Query="EVALUATE#(lf)SUMMARIZECOLUMNS(#(lf)    -- List all the columns to group by#(lf)    'DIM_MODELS'[plant_id],#(lf)    'DIM_MODELS'[plant_name],#(lf)    'DIM_MODELS'[region],#(lf)    'DIM_MODELS'[group_brand],#(lf)    'DIM_MODELS'[model_name],#(lf)    'DIM_MODELS'[code],#(lf)#(lf)    -- Filtering only data which needs to be included#(lf)    FILTER(#(lf)        'DIM_MODELS',#(lf)        'DIM_MODELS'[active] = TRUE() && #(lf)        'DIM_MODELS'[group_brand] IN {""Volkswagen"", ""Volkswagen NFZ"", ""Skoda"", ""Seat / Cupra""}#(lf)    ),#(lf)    -- Defining the aggregated measures#(lf)#(tab)""models_cnt"", COUNTROWS('DIM_MODELS')#(lf))"]),
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"[models_cnt]"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"DIM_MODELS[plant_id]", "plant_id"}, {"DIM_MODELS[plant_name]", "plant_name"}, {"DIM_MODELS[region]", "region"}, {"DIM_MODELS[model_name]", "model_name"}, {"DIM_MODELS[code]", "code"}, {"DIM_MODELS[group_brand]", "group_brand"}}),
+				    #"Sorted Rows" = Table.Sort(#"Renamed Columns",{{"model_name", Order.Descending}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Sorted Rows", "index", 1, 1, Int64.Type),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Added Index",{{"model_name", "Model"}, {"plant_name", "Plant"}}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Renamed Columns1", "Model", "Model - Copy"),
+				    #"Extracted Text Before Delimiter" = Table.TransformColumns(#"Duplicated Column", {{"Model - Copy", each Text.BeforeDelimiter(_, " "), type text}}),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Extracted Text Before Delimiter",{{"Model - Copy", "ModelCodeExtract"}, {"Plant", "plant"}}),
+				    #"Duplicated Column1" = Table.DuplicateColumn(#"Renamed Columns2", "Model", "Model - Copy"), // cleaning model code name for connection to Lama.Car
+				    #"Replaced Value" = Table.ReplaceValue(#"Duplicated Column1","Cupra","",Replacer.ReplaceText,{"Model - Copy"}), // cleaning model code name for connection to Lama.Car
+				    #"Extracted Text After Delimiter" = Table.TransformColumns(#"Replaced Value", {{"Model - Copy", each Text.AfterDelimiter(_, " "), type text}}), // cleaning model code name for connection to Lama.Car
+				    #"Trimmed Text" = Table.TransformColumns(#"Extracted Text After Delimiter",{{"Model - Copy", Text.Trim, type text}}), // cleaning model code name for connection to Lama.Car
+				    #"Extracted Text Before Delimiter1" = Table.TransformColumns(#"Trimmed Text", {{"Model - Copy", each Text.BeforeDelimiter(_, " "), type text}}), // cleaning model code name for connection to Lama.Car
+				    #"Added Custom" = Table.AddColumn(#"Extracted Text Before Delimiter1", "Model_Werk_Lama_Key", each [plant_id]&"-"&[#"Model - Copy"]), // cleaning model code name for connection to Lama.Car
+				    #"Removed Columns1" = Table.RemoveColumns(#"Added Custom",{"Model - Copy"}),
+				    // Filter out City Van as it from Ford and its not allowed to show in the dashboard
+				    #"Filtered Rows" = Table.SelectRows(#"Removed Columns1", each not Text.Contains([Model], "City Van")) // cleaning model code name for connection to Lama.Car
+				in
+				    #"Filtered Rows"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

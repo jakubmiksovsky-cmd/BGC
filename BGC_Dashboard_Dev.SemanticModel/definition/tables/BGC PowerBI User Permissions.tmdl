@@ -1,0 +1,149 @@
+table 'BGC PowerBI User Permissions'
+	isHidden
+	lineageTag: 81993632-1730-438e-a2f3-bcfa6bc8cc4a
+
+	column Id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ba7e0e6c-bdbb-455e-be0a-339f0ad854ca
+		summarizeBy: count
+		sourceColumn: Id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Title
+		dataType: string
+		isHidden
+		lineageTag: c488f14b-09eb-476b-b523-19ac8fff58c3
+		summarizeBy: none
+		sourceColumn: Title
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column UserEmail
+		dataType: string
+		isHidden
+		lineageTag: 7c27f3fb-f490-4d01-89d6-a947ab62fbb5
+		summarizeBy: none
+		sourceColumn: UserEmail
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		isHidden
+		lineageTag: ca74a73c-d845-4b6f-9dae-41607e8f9c2c
+		summarizeBy: none
+		sourceColumn: Brand
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Plant
+		dataType: string
+		isHidden
+		lineageTag: e5afcad7-e4e8-40c7-8b05-ed892d7a43f0
+		summarizeBy: none
+		sourceColumn: Plant
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlantID
+		dataType: string
+		isHidden
+		lineageTag: 8b04b848-9e45-4190-bc6f-bac12041cc72
+		summarizeBy: none
+		sourceColumn: PlantID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Modified
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: d0dd400e-ed00-49b1-8760-420a3179360e
+		summarizeBy: none
+		sourceColumn: Modified
+
+		variation Variation
+			isDefault
+			relationship: 5b727313-f0cf-4f7f-ae43-1beb6659190f
+			defaultHierarchy: LocalDateTable_6f79188e-e49b-4408-ae16-ff8c8f193170.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Created
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 445c596b-face-4604-9c69-5c1d7f4d07c7
+		summarizeBy: none
+		sourceColumn: Created
+
+		variation Variation
+			isDefault
+			relationship: fec36ae0-23f1-40e2-aee1-a2b74ec6f12c
+			defaultHierarchy: LocalDateTable_be450cfe-91f3-4d8d-85e6-e3c5875f6977.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column UserRole
+		dataType: string
+		isHidden
+		lineageTag: 1a70f44f-84a0-401d-aff8-16ceb9ac6783
+		summarizeBy: none
+		sourceColumn: UserRole
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Membership
+		dataType: string
+		lineageTag: 952a96ed-1d5d-4e6e-9e85-178dc49b0872
+		summarizeBy: none
+		sourceColumn: Membership
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'BGC PowerBI User Permissions' = m
+		mode: import
+		queryGroup: RLS
+		source =
+				let
+				    Source = SharePoint.Tables("https://volkswagengroup.sharepoint.com/sites/BGCDashboardQA/", [ApiVersion = 15]),
+				    #"86c1b147-f349-4588-856d-901ddd6fa842" = Source{[Id="86c1b147-f349-4588-856d-901ddd6fa842"]}[Items],
+				    #"Removed Other Columns" = Table.SelectColumns(#"86c1b147-f349-4588-856d-901ddd6fa842",{"Id", "Title", "Brand", "Plant", "UserRole", "Modified", "Created", "UserName", "Membership"}),
+				    #"Expanded UserName" = Table.ExpandRecordColumn(#"Removed Other Columns", "UserName", {"EMail"}, {"UserName.EMail"}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Expanded UserName",{"Id", "Title", "UserName.EMail", "Brand", "Plant", "Modified", "Created"}),
+				    #"Expanded Brand" = Table.ExpandListColumn(#"Reordered Columns", "Brand"),
+				    #"Expanded Plant" = Table.ExpandListColumn(#"Expanded Brand", "Plant"),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Expanded Plant", "Plant", Splitter.SplitTextByDelimiter("-", QuoteStyle.Csv), {"Plant.1", "Plant.2"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Plant.1", type text}, {"Modified", type datetime}, {"Created", type datetime}, {"Id", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Plant.1", "Plant"}, {"Plant.2", "PlantID"}, {"UserName.EMail", "UserEmail"}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Renamed Columns", each [Membership] = "Active")
+				in
+				    #"Filtered Rows"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

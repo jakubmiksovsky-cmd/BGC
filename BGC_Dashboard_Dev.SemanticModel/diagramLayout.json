@@ -1,0 +1,205 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 554.02380952381009,
+            "y": 309.77380952380975
+          },
+          "nodeIndex": "Calendar",
+          "nodeLineageTag": "7490d5a3-db8a-47b6-bb08-fdc84750d794",
+          "size": {
+            "height": 543.66666666666652,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 1571.1904761904768,
+            "y": 628.08333333333348
+          },
+          "nodeIndex": "Measures_Table",
+          "nodeLineageTag": "0f0fa6f8-b9ca-4574-8350-f952698ce0df",
+          "size": {
+            "height": 145,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 717.87915543575878,
+            "y": 43.952830188679059
+          },
+          "nodeIndex": "Month_Title_Sort",
+          "nodeLineageTag": "6b937b5d-966a-4218-83b5-bdff9717ddf9",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 406.05031446540858,
+            "y": 38.028301886792121
+          },
+          "nodeIndex": "Week_Title_Sort",
+          "nodeLineageTag": "6956736b-2668-472e-8104-a5ac88c1618e",
+          "size": {
+            "height": 176.57142857142867,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 11.190476190476602,
+            "y": 12.249999999999744
+          },
+          "nodeIndex": "TRANSLATIONS_BGC",
+          "nodeLineageTag": "1e7f8884-7d55-45e6-b161-895bee6d3703",
+          "size": {
+            "height": 239.33333333333337,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 927.20238095238108
+          },
+          "nodeIndex": "ProAudit_Models_dim",
+          "nodeLineageTag": "e3d9c024-019d-4b0a-b6ba-6ebf1f9e5241",
+          "size": {
+            "height": 400.33333333333326,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 399.59523809523813
+          },
+          "nodeIndex": "ProAudit_Results_fact",
+          "nodeLineageTag": "3f184b24-fbfe-4bc2-a12f-6d378ce760d2",
+          "size": {
+            "height": 416.66666666666674,
+            "width": 262.33333333333337
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 369.8333333333336,
+            "y": 940.33333333333314
+          },
+          "nodeIndex": "LaMa_Car_fact",
+          "nodeLineageTag": "7d51aa07-c4c8-4e1f-9a60-5750fba73571",
+          "size": {
+            "height": 628.33333333333326,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1083.999987284343,
+            "y": 16.20833333333303
+          },
+          "nodeIndex": "BGC PowerBI User Permissions",
+          "nodeLineageTag": "81993632-1730-438e-a2f3-bcfa6bc8cc4a",
+          "size": {
+            "height": 324.5,
+            "width": 294
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1281.666666666667,
+            "y": 625.37499999999977
+          },
+          "nodeIndex": "Region/Plant",
+          "nodeLineageTag": "550fabc4-7ada-4e43-b813-3b58b9db5e79",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 1182.3333333333337,
+            "y": 909.79166666666652
+          },
+          "nodeIndex": "Factory Quality Commentation",
+          "nodeLineageTag": "f8b9dc22-4fb3-4911-bd37-bedda842efa8",
+          "size": {
+            "height": 323.33333333333326,
+            "width": 234
+          },
+          "zIndex": 15
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 60,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 1,
+      "scrollPosition": {
+        "x": 0,
+        "y": 13.75
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 444,
+            "y": 0
+          },
+          "nodeIndex": "Calendar",
+          "nodeLineageTag": "7490d5a3-db8a-47b6-bb08-fdc84750d794",
+          "size": {
+            "height": 157,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 129,
+            "y": 290
+          },
+          "nodeIndex": "ProAudit_Models_dim",
+          "size": {
+            "height": 250,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Layout 2",
+      "zoomValue": 80,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

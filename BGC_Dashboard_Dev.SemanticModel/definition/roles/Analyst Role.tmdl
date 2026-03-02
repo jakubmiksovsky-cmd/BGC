@@ -1,0 +1,40 @@
+role 'Analyst Role'
+	modelPermission: read
+
+	tablePermission ProAudit_Models_dim = ```
+			VAR CurrentUser = USERPRINCIPALNAME()
+			
+			VAR UserRole =
+			    LOOKUPVALUE('BGC PowerBI User Permissions'[UserRole], 'BGC PowerBI User Permissions'[UserEmail], CurrentUser)
+			
+			VAR PlantsAccess =
+			    CALCULATETABLE(VALUES('BGC PowerBI User Permissions'[PlantID]), 'BGC PowerBI User Permissions'[UserEmail] = CurrentUser)
+			
+			VAR BrandsAccess =
+			    CALCULATETABLE(VALUES('BGC PowerBI User Permissions'[Brand]), 'BGC PowerBI User Permissions'[UserEmail] = CurrentUser)
+			
+			RETURN
+			SWITCH(
+			    UserRole,   
+			    "Analyst",
+			     
+			        ProAudit_Models_dim[group_brand] IN BrandsAccess
+			        ||
+			        ProAudit_Models_dim[plant_id] IN PlantsAccess
+			        ,
+			    // "Auditor Lead",
+			    //     DIM_MODELS[group_brand] IN BrandsAccess
+			    //     ||
+			    //     DIM_MODELS[plant_id] IN PlantsAccess
+			    //     ,
+			    // "Analyst",
+			    //     DIM_MODELS[plant_id] IN PlantsAccess,    
+			    // "Auditor",
+			    //     DIM_MODELS[plant_id] IN PlantsAccess,
+			
+			    FALSE()
+			)
+			```
+
+	annotation PBI_Id = 0f28de6ab4cf4d4299032c6401bde7c0
+

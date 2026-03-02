@@ -1,0 +1,62 @@
+relationship cba048da-9175-42fc-a14c-c99c586d43c7
+	fromColumn: Calendar.current_week
+	toColumn: Week_Title_Sort.Week_Title
+
+relationship aa568c07-bf21-4667-80bb-ffc2da4d421c
+	fromColumn: Calendar.current_month
+	toColumn: Month_Title_Sort.Month_Title
+
+relationship 26b552c8-e453-fdb3-1f10-c0a749456d2e
+	toCardinality: many
+	fromColumn: ProAudit_Results_fact.YearWeek
+	toColumn: Calendar.YearWeek
+
+relationship 5cc8bdef-b676-33fa-0318-636b5fb837c0
+	crossFilteringBehavior: bothDirections
+	fromColumn: ProAudit_Results_fact.model_code
+	toColumn: ProAudit_Models_dim.code
+
+relationship 5b727313-f0cf-4f7f-ae43-1beb6659190f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'BGC PowerBI User Permissions'.Modified
+	toColumn: LocalDateTable_6f79188e-e49b-4408-ae16-ff8c8f193170.Date
+
+relationship fec36ae0-23f1-40e2-aee1-a2b74ec6f12c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'BGC PowerBI User Permissions'.Created
+	toColumn: LocalDateTable_be450cfe-91f3-4d8d-85e6-e3c5875f6977.Date
+
+relationship ff433947-5c02-4066-b4b7-e5901fd4a0ad
+	joinOnDateBehavior: datePartOnly
+	fromColumn: LaMa_Car_fact.'BERICHTSWOCHE.FROM'
+	toColumn: LocalDateTable_5205c048-25b9-4a43-8f84-00fb3409a2e9.Date
+
+relationship 551024a4-0e24-4f7a-a005-01b0f6ab9660
+	joinOnDateBehavior: datePartOnly
+	fromColumn: LaMa_Car_fact.'BERICHTSWOCHE.TO'
+	toColumn: LocalDateTable_ec36966e-b1b1-47a0-8403-c25e7ef690ac.Date
+
+relationship d9c78537-16f0-dfb6-b9d7-7b53771e5b7a
+	toCardinality: many
+	fromColumn: LaMa_Car_fact.KW
+	toColumn: Calendar.YearWeek
+
+relationship ffe5818f-a1b7-c0c2-96fa-c5bd5d034c0b
+	toCardinality: many
+	fromColumn: LaMa_Car_fact.Model_Werk_Lama_Key
+	toColumn: ProAudit_Models_dim.Model_Werk_Lama_Key
+
+relationship AutoDetected_9b53a2dd-87af-46d2-bfb6-00ae68fb9663
+	fromColumn: 'Factory Quality Commentation'.'PA_dim.code'
+	toColumn: ProAudit_Models_dim.code
+
+relationship 77d39c1f-b1a5-cc57-b0d6-c9e3b759db1e
+	toCardinality: many
+	fromColumn: 'Factory Quality Commentation'.YearWeek
+	toColumn: Calendar.YearWeek
+
+relationship db146ba0-34e5-4011-8054-ff309a23e64d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: LaMa_Car_fact.ENTSPERRUNG_TS
+	toColumn: LocalDateTable_c2b5e573-8bbf-4ae8-80be-f475e4da6697.Date
+
